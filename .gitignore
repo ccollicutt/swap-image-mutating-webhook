@@ -1,0 +1,4 @@
+.envrc
+.venv
+app/tests/__pycache__/
+app/__pycache__/

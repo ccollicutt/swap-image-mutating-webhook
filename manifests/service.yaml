@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: swap-image
+  namespace: swap-image
+spec:
+  selector:
+    app: swap-image-admission-controller
+  ports:
+  - protocol: TCP
+    port: 443
+    targetPort: 8443
+    protocol: TCP
+  type: ClusterIP

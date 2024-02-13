@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: swap-image
+  annotations:
+    cert-manager.io/inject-ca-from: swap-image/admission-controller-certificate
+webhooks:
+  - name: swap-image.serverascode.com
+    clientConfig:
+      service:
+        namespace: swap-image
+        name: swap-image
+        path: "/mutate"
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    namespaceSelector:
+      matchLabels:
+        swap-image-enabled: "true"
+    failurePolicy: Fail
+    sideEffects: None
+    admissionReviewVersions: ["v1"]

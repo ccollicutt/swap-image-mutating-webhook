@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swap-image
+  namespace: swap-image
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swap-image-admission-controller
+  template:
+    metadata:
+      labels:
+        app: swap-image-admission-controller
+    spec:
+      containers:
+      - name: admission-controller
+        image: harbor.oakwood.ave/library/swap-image-mutating-webhook:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8443
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - name: certs
+          mountPath: /certs
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /var/tmp
+      volumes:
+      - name: certs
+        secret:
+          secretName: admission-controller-certificate
+      - name: tmp-volume
+        emptyDir: {}

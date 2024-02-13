@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swap-image-test
+  namespace: swap-image-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swap-image-test
+  template:
+    metadata:
+      labels:
+        app: swap-image-test
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
